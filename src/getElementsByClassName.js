@@ -6,22 +6,21 @@
 // But instead we're going to implement it from scratch:
 var getElementsByClassName = function(targetName
 ) {
+
   var result = [];
 
-  console.log(document.body);
-  console.log(document.body);
+  var traverseNode = function(element) {
 
-  var traverseNode = function(node) {
-
-    if (node.classList && node.className === targetName) {
-      result.push(node.nodeName);
+    if (element.classList && element.classList.contains(targetName)) {
+      result.push(element);
     }
-    if (node.children) {
-      _.each(node.children, traverseElement);
+
+    if (element.children) {
+      _.each(element.children, traverseNode);
     }
   };
 
-  traverseElement(document.body);
+  traverseNode(document.body);
   return result;
 
 };

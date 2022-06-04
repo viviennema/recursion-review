@@ -8,11 +8,11 @@ var stringifyJSON = function(obj) {
 
   // string input
   if (typeof obj === 'string') {
-    return obj;
+    return '"' + obj + '"';
   }
 
   // null input
-  if (typeof obj === 'null') {
+  if ( obj === null) {
     return 'null';
   }
 
@@ -34,10 +34,11 @@ var stringifyJSON = function(obj) {
       if ( i !== obj.length - 1) {
         result += stringifyJSON(obj[i]) + ',';
       } else {
-        result += stringifyJSON(obj[i]) + ']';
+        result += stringifyJSON(obj[i]);
       }
 
     }
+    result += ']';
     return result;
   }
 
@@ -45,22 +46,30 @@ var stringifyJSON = function(obj) {
 
     var result = '{';
 
-    var keys = obj.getKeys();
+    var keys = Object.keys(obj);
 
     for (var i = 0; i < keys.length; i++) {
+
+      if (typeof obj[keys[i]] === 'function' || typeof obj[keys[i]] === 'undefined') {
+        continue;
+      }
+
+      var value = stringifyJSON(obj[keys[i]]);
+      var key = stringifyJSON(keys[i]);
+
       if (i !== keys.length - 1) {
-        result += stringifyJSON(key);
+        result += key;
         result += ':';
-        result += stringifyJSON(obj[key]);
+        result += value;
         result += ',';
       } else {
-        result += stringifyJSON(key);
+        result += key;
         result += ':';
-        result += stringifyJSON(obj[key]);
-        result += '}';
+        result += value;
       }
 
     }
+    result += '}';
     return result;
   }
 
